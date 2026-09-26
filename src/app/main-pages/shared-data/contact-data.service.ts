@@ -12,6 +12,7 @@ import {
   CollectionReference,
   DocumentReference,
 } from '@angular/fire/firestore';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { EnvironmentInjector, Injectable, inject, runInInjectionContext } from '@angular/core';
 import { BehaviorSubject, Observable, Observer } from 'rxjs';
 import { Contacts } from './../contacts-interface';
@@ -30,6 +31,12 @@ export class ContactDataService {
   /** Angular environment injector for dependency injection context */
   private readonly injector = inject(EnvironmentInjector);
 
+  /** Firebase Auth instance, used to start the listener only once a user is signed in */
+  private readonly auth = inject(Auth);
+
+  /** Unsubscribe function for the auth state listener */
+  private unsubAuth?: () => void;
+
   /** Flag indicating if user is not in login state */
   notInLogIn: boolean = false;
 
@@ -37,7 +44,7 @@ export class ContactDataService {
   signUpButtonVisible = true;
 
   /** Unsubscribe function for Firebase listeners */
-  unsubList!: () => void;
+  unsubList?: () => void;
 
   /** Organized contact list grouped by alphabetical letters */
   contactlist: { letter: string; contacts: Contacts[] }[] = [];
@@ -52,17 +59,45 @@ export class ContactDataService {
    * Initializes the ContactDataService and sets up Firebase listeners
    */
   constructor() {
-    this.initializeContactList();
+    this.unsubAuth = onAuthStateChanged(this.auth, (user) => this.handleAuthChange(!!user));
+  }
+
+  /**
+   * Starts the contact listener when a user signs in and stops it on sign-out.
+   * Firestore rules require authentication, so a listener started before sign-in would be rejected.
+   * @param {boolean} signedIn - Whether a user is currently signed in
+   */
+  private handleAuthChange(signedIn: boolean) {
+    this.stopContactList();
+    if (signedIn) {
+      this.initializeContactList();
+    } else {
+      this.contactlist = [];
+    }
   }
 
   /**
    * Sets up the Firebase listener for contact list updates
    */
   private initializeContactList() {
-    this.unsubList = onSnapshot(this.getContactRef(), (list) => {
-      this.resetContactList();
-      this.processContactList(list);
-    });
+    this.unsubList = runInInjectionContext(this.injector, () =>
+      onSnapshot(
+        this.getContactRef(),
+        (list) => {
+          this.resetContactList();
+          this.processContactList(list);
+        },
+        (error) => console.error('Contact listener error:', error)
+      )
+    );
+  }
+
+  /**
+   * Stops the Firebase contact listener if it is running
+   */
+  private stopContactList() {
+    this.unsubList?.();
+    this.unsubList = undefined;
   }
 
   /**
@@ -114,9 +149,8 @@ export class ContactDataService {
    * Cleans up Firebase listeners on component destruction
    */
   ngOnDestroy() {
-    if (this.unsubList) {
-      this.unsubList();
-    }
+    this.unsubAuth?.();
+    this.stopContactList();
   }
 
   /**

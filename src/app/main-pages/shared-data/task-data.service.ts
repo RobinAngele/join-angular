@@ -12,6 +12,7 @@ import {
   Timestamp,
   collectionData,
 } from '@angular/fire/firestore';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { Task, BoardColumn, FirestoreTask } from './task.interface';
 
 /**
@@ -84,13 +85,26 @@ export class TaskDataService {
    * Angular EnvironmentInjector for running code in the correct injection context.
    */
   private readonly injector = inject(EnvironmentInjector);
+
+  /**
+   * Firebase Auth instance, used to start the tasks listener only once a user is signed in.
+   */
+  private readonly auth = inject(Auth);
   // #endregion
 
   /**
-   * Initializes the TaskDataService and starts the tasks listener.
+   * Initializes the TaskDataService and starts the tasks listener whenever a user signs in.
+   * Firestore rules require authentication, so a listener started before sign-in would be rejected.
    */
   constructor() {
-    this.initTasks();
+    onAuthStateChanged(this.auth, (user) => {
+      this.cleanUp();
+      if (user) {
+        this.initTasks();
+      } else {
+        this.tasksSubject.next([]);
+      }
+    });
   }
 
   // #region Lifecycle
@@ -106,11 +120,16 @@ export class TaskDataService {
    * - Stores the unsubscribe function to allow proper cleanup later.
    */
   initTasks(): void {
-    const taskSubStream = collectionData(this.getTasksRef(), {
-      idField: 'id',
-    })
+    const taskSubStream = runInInjectionContext(this.injector, () =>
+      collectionData(this.getTasksRef(), {
+        idField: 'id',
+      })
+    )
       .pipe(map((tasks) => (tasks as FirestoreTask[]).map((task) => this.translateTimestampToDate(task))))
-      .subscribe((tasks) => this.tasksSubject.next(tasks as Task[]));
+      .subscribe({
+        next: (tasks) => this.tasksSubject.next(tasks as Task[]),
+        error: (error) => console.error('Tasks listener error:', error),
+      });
     this.unsubscribeFromTasks = () => taskSubStream.unsubscribe();
   }
 
@@ -119,6 +138,7 @@ export class TaskDataService {
    */
   cleanUp(): void {
     this.unsubscribeFromTasks?.();
+    this.unsubscribeFromTasks = undefined;
   }
   // #endregion
 
