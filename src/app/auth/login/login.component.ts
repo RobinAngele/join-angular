@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthenticationService } from '../services/authentication.service';
 import { Router, RouterModule } from '@angular/router';
 import { ContactDataService } from '../../main-pages/shared-data/contact-data.service';
+import { DemoDataService } from '../../shared/services/demo-data.service';
 
 /**
  * Login Component
@@ -55,11 +56,13 @@ export class LoginComponent {
    * @param {AuthenticationService} authenticationService - Service for user authentication
    * @param {Router} router - Angular router for navigation
    * @param {ContactDataService} contactDataService - Service for contact data operations
+   * @param {DemoDataService} demoDataService - Service that restores the demo contacts and tasks
    */
   constructor(
     private authenticationService: AuthenticationService,
     private router: Router,
-    public contactDataService: ContactDataService
+    public contactDataService: ContactDataService,
+    private demoDataService: DemoDataService
   ) {}
 
   // #region UI Interactions
@@ -90,6 +93,7 @@ export class LoginComponent {
   async onLogin() {
     try {
       await this.authenticationService.signIn(this.emailInputTest, this.passwordInputTest);
+      await this.demoDataService.seedDemoData();
 
       if (this.isMobile) {
         this.router.navigate(['/mobile-greeting']);
@@ -112,6 +116,7 @@ export class LoginComponent {
   async onGuestLogin() {
     try {
       await this.authenticationService.guestSignIn();
+      await this.demoDataService.seedDemoData();
 
       if (this.isMobile) {
         this.router.navigate(['/mobile-greeting']);
