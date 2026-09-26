@@ -14,6 +14,7 @@ import {
 } from '@angular/fire/firestore';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { Task, BoardColumn, FirestoreTask } from './task.interface';
+import { getVisitorMetadata } from '../../shared/services/visitor-data';
 
 /**
  * Service for managing tasks in Firestore.
@@ -178,7 +179,9 @@ export class TaskDataService {
     const taskToAdd: FirestoreTask = this.translateTaskToFirestoreTask(task);
 
     try {
-      await runInInjectionContext(this.injector, () => addDoc(this.getTasksRef(), taskToAdd));
+      await runInInjectionContext(this.injector, () =>
+        addDoc(this.getTasksRef(), { ...taskToAdd, ...getVisitorMetadata(this.auth) })
+      );
     } catch (error: unknown) {
       console.error('Error adding task:', error);
       throw error;

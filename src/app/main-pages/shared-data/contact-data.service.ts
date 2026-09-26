@@ -16,6 +16,7 @@ import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { EnvironmentInjector, Injectable, inject, runInInjectionContext } from '@angular/core';
 import { BehaviorSubject, Observable, Observer } from 'rxjs';
 import { Contacts } from './../contacts-interface';
+import { getVisitorMetadata } from '../../shared/services/visitor-data';
 
 /**
  * Service for managing contact data operations with Firebase Firestore
@@ -242,7 +243,9 @@ export class ContactDataService {
    */
   async addContact(contactData: Contacts): Promise<void> {
     try {
-      await runInInjectionContext(this.injector, () => addDoc(this.getContactRef(), contactData));
+      await runInInjectionContext(this.injector, () =>
+        addDoc(this.getContactRef(), { ...contactData, ...getVisitorMetadata(this.auth) })
+      );
     } catch (error: unknown) {
       console.error('Error adding contact:', error);
       throw error;

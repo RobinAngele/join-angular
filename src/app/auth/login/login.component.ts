@@ -93,7 +93,7 @@ export class LoginComponent {
   async onLogin() {
     try {
       await this.authenticationService.signIn(this.emailInputTest, this.passwordInputTest);
-      await this.demoDataService.seedDemoData();
+      await this.demoDataService.prepareDemo();
 
       if (this.isMobile) {
         this.router.navigate(['/mobile-greeting']);
@@ -116,7 +116,7 @@ export class LoginComponent {
   async onGuestLogin() {
     try {
       await this.authenticationService.guestSignIn();
-      await this.demoDataService.seedDemoData();
+      await this.demoDataService.prepareDemo();
 
       if (this.isMobile) {
         this.router.navigate(['/mobile-greeting']);
