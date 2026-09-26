@@ -1,5 +1,15 @@
 import { EnvironmentInjector, Injectable, inject, runInInjectionContext } from '@angular/core';
-import { Firestore, doc, writeBatch } from '@angular/fire/firestore';
+import {
+  Firestore,
+  QueryConstraint,
+  Timestamp,
+  collection,
+  doc,
+  getDocs,
+  query,
+  where,
+  writeBatch,
+} from '@angular/fire/firestore';
 import { Contacts } from '../../main-pages/contacts-interface';
 import { Task } from '../../main-pages/shared-data/task.interface';
 import { TaskDataService } from '../../main-pages/shared-data/task-data.service';
@@ -10,7 +20,8 @@ import { TaskDataService } from '../../main-pages/shared-data/task-data.service'
  * Every demo record is written under a fixed document ID with a single batch of `set` operations.
  * Seeding is therefore idempotent: no matter how often or how many visitors at once trigger it,
  * the database always holds exactly one copy of each demo record, reset to its original state.
- * Records created by users are never touched.
+ * Records created by visitors are tagged with `createdBy` and `createdAt` (see visitor-data.ts) and deleted
+ * when their creator logs out, or 24 hours after creation for visitors who never log out.
  */
 @Injectable({
   providedIn: 'root',
@@ -24,6 +35,65 @@ export class DemoDataService {
 
   /** Task service, used to convert tasks to their Firestore format */
   private readonly taskDataService = inject(TaskDataService);
+
+  /** Collections that hold visitor data */
+  private readonly visitorCollections = ['contacts', 'tasks'];
+
+  /** How long records created by visitors are kept at most */
+  private readonly visitorDataLifetimeMs = 24 * 60 * 60 * 1000;
+
+  /**
+   * Prepares the demo after sign-in: restores the demo records and deletes expired visitor data
+   * @returns {Promise<void>} Promise that resolves when the demo is ready
+   */
+  async prepareDemo(): Promise<void> {
+    await this.seedDemoData();
+    await this.deleteExpiredVisitorData();
+  }
+
+  /**
+   * Deletes all contacts and tasks created by the given user. Called on logout.
+   * Errors are logged and not rethrown, so a failed cleanup never blocks the logout.
+   * @param {string} userId - UID of the user whose records are deleted
+   * @returns {Promise<void>} Promise that resolves when the records have been deleted
+   */
+  async deleteVisitorData(userId: string): Promise<void> {
+    await this.deleteMatchingRecords(where('createdBy', '==', userId));
+  }
+
+  /**
+   * Deletes contacts and tasks created by visitors more than 24 hours ago,
+   * which covers visitors who closed the tab without logging out.
+   * @returns {Promise<void>} Promise that resolves when the records have been deleted
+   */
+  async deleteExpiredVisitorData(): Promise<void> {
+    const cutoff = Timestamp.fromMillis(Date.now() - this.visitorDataLifetimeMs);
+    await this.deleteMatchingRecords(where('createdAt', '<', cutoff));
+  }
+
+  /**
+   * Deletes every contact and task matching the given constraint in a single batch
+   * @param {QueryConstraint} constraint - Filter selecting the records to delete
+   * @returns {Promise<void>} Promise that resolves when the records have been deleted
+   */
+  private async deleteMatchingRecords(constraint: QueryConstraint): Promise<void> {
+    try {
+      const batch = runInInjectionContext(this.injector, () => writeBatch(this.firestore));
+      let count = 0;
+      for (const collectionName of this.visitorCollections) {
+        const snapshot = await runInInjectionContext(this.injector, () =>
+          getDocs(query(collection(this.firestore, collectionName), constraint)),
+        );
+        snapshot.forEach((record) => batch.delete(record.ref));
+        count += snapshot.size;
+      }
+      if (count > 0) {
+        await batch.commit();
+      }
+    } catch (error: unknown) {
+      console.error('Error deleting visitor data:', error);
+    }
+  }
 
   /**
    * Writes all demo contacts and tasks under their fixed IDs, overwriting any previous version.

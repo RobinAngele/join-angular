@@ -9,6 +9,7 @@ import {
 } from '@angular/fire/auth';
 import { onAuthStateChanged, signInAnonymously, User } from 'firebase/auth';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { DemoDataService } from '../../shared/services/demo-data.service';
 
 /**
  * Service that manages all authentication-related logic using Firebase Auth.
@@ -27,6 +28,11 @@ export class AuthenticationService {
    * within the correct injection context.
    */
   private readonly injector = inject(EnvironmentInjector);
+
+  /**
+   * Service that deletes the data a visitor created when they log out.
+   */
+  private readonly demoDataService = inject(DemoDataService);
 
   /**
    * Emits the current authentication state of the user.
@@ -159,6 +165,7 @@ export class AuthenticationService {
   /**
    * Signs the user out from Firebase authentication.
    * Executes within Angular's injection context to ensure compatibility with Firebase.
+   * Deletes the contacts and tasks the user created before signing out, since the app is a demo.
    * Also resets `currentUser` to `null` after a successful sign-out.
    *
    * @returns A promise that resolves when the user is signed out.
@@ -166,6 +173,10 @@ export class AuthenticationService {
    */
   async logout(): Promise<void> {
     try {
+      const userId = this.auth.currentUser?.uid;
+      if (userId) {
+        await this.demoDataService.deleteVisitorData(userId);
+      }
       await runInInjectionContext(this.injector, () => signOut(this.auth));
       this.currentUser = null;
     } catch (error) {
