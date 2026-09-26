@@ -1,0 +1,46 @@
+name: Deploy to o2switch
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # package-lock.json resolves some packages from registry.npmmirror.com; use the official registry in CI
+      - name: Use the official npm registry
+        run: sed -i 's#https://registry.npmmirror.com/#https://registry.npmjs.org/#g' package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The app is served from https://frontend.robin4consulting.com/join/
+      - name: Build
+        run: npx ng build --base-href /join/
+        env:
+          NG_CLI_ANALYTICS: 'false'
+
+      # Uploads only the built app into join/. Files not produced by this build (e.g. the existing
+      # .htaccess that makes deep links work) are never touched; the action only removes files it uploaded itself.
+      - name: Upload via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./dist/join/browser/
+          # Path relative to the FTP account's root (/home2/kiri5142/frontend.robin4consulting.com)
+          server-dir: ./join/
