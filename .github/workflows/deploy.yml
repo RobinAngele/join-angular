@@ -13,9 +13,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           # Node 20 is past its end of life; 24 is also what Angular 22 will need
           node-version: 24
@@ -32,7 +32,7 @@ jobs:
       # Uploads only the built app into join/. Files not produced by this build (e.g. the existing
       # .htaccess that makes deep links work) are never touched; the action only removes files it uploaded itself.
       - name: Upload via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
