@@ -1,0 +1,33 @@
+name: Check pull request
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      # The same install and build as the deploy workflow, so a pull request that would
+      # fail the deploy fails here first.
+      - name: Install dependencies
+        run: npm ci
+
+      # The unit tests are not run here yet: 18 of the 23 already fail on main.
+      - name: Build
+        run: npx ng build --base-href /join/
+        env:
+          NG_CLI_ANALYTICS: 'false'
