@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { ContactDataService } from '../main-pages/shared-data/contact-data.service';
 
 /**
@@ -11,7 +11,7 @@ import { ContactDataService } from '../main-pages/shared-data/contact-data.servi
  */
 @Component({
   selector: 'app-auth',
-  imports: [RouterOutlet, RouterModule, CommonModule],
+  imports: [RouterOutlet, RouterModule],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
 })

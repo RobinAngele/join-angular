@@ -1,242 +1,256 @@
 <Section [class.board-card]="openFromBoard">
-    <h2>Add Task</h2>
-    <form #taskForm="ngForm" (ngSubmit)="submitTaskFromForm()" action="">
-        <div class="fullcontent">
-            <div class="left-content">
-                <div>
-                    <p>Title<span class="red">*</span></p>
-                    <input name="title" id="title" [(ngModel)]="title" #titleInput="ngModel" class="input" required
-                        type="text" placeholder="Enter a title">
-                    <div class="error" *ngIf="titleInput.invalid && (titleInput.dirty || titleInput.touched)">
-                        Title is required!
-                    </div>
-                </div>
-                <div>
-                    <p>Description</p>
-                    <textarea [(ngModel)]="description" name="Description" id=""
-                        placeholder="Enter a Description"></textarea>
-                </div>
-                <div>
-                    <p>Due date<span class="red">*</span></p>
-                    <input required class="input" [min]="minDate" type="date" name="date" id="date" [(ngModel)]="date"
-                        #dateInput="ngModel" lang="en-US">
-                    <div class="error" *ngIf="dateInput.invalid && (dateInput.dirty || dateInput.touched)">
-                        Due date is required!
-                    </div>
-                </div>
-            </div>
-            <div class="separator"></div>
-            <div class="right-content">
-                <div>
-                    <p>Priority</p>
-                    <div class="button-wrapper">
-                        <button type="button" (click)="changePriority('urgent')"
-                            [class.btn-not-selectet]="priority != 'urgent'"
-                            [class.btn-urgent]="priority == 'urgent'">Urgent
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_67_4121)">
-                                    <path
-                                        d="M16 14.7548C16.1994 14.7544 16.3937 14.8163 16.5543 14.9314L24.1228 20.3653C24.2212 20.4361 24.3044 20.525 24.3675 20.627C24.4307 20.7291 24.4725 20.8422 24.4907 20.9599C24.5273 21.1977 24.4654 21.4399 24.3184 21.6333C24.1714 21.8266 23.9514 21.9553 23.7068 21.9909C23.4623 22.0266 23.2131 21.9664 23.0143 21.8234L16 16.7925L8.98577 21.8234C8.8873 21.8942 8.77545 21.9454 8.65662 21.9742C8.53779 22.0029 8.4143 22.0086 8.2932 21.9909C8.1721 21.9733 8.05577 21.9326 7.95084 21.8712C7.84592 21.8099 7.75445 21.729 7.68166 21.6333C7.60888 21.5375 7.5562 21.4288 7.52664 21.3132C7.49708 21.1977 7.49122 21.0776 7.50938 20.9599C7.52754 20.8422 7.56938 20.7291 7.63251 20.627C7.69563 20.525 7.77881 20.4361 7.87728 20.3653L15.4458 14.9314C15.6063 14.8163 15.8006 14.7544 16 14.7548Z"
-                                        fill="#FF3D00" />
-                                    <path
-                                        d="M16 9.99988C16.1994 9.99954 16.3937 10.0614 16.5543 10.1765L24.1228 15.6104C24.3216 15.7534 24.454 15.9672 24.4907 16.205C24.5273 16.4428 24.4654 16.685 24.3184 16.8784C24.1714 17.0717 23.9514 17.2004 23.7068 17.2361C23.4623 17.2717 23.2131 17.2115 23.0143 17.0686L16 12.0376L8.98577 17.0686C8.78689 17.2115 8.53777 17.2717 8.2932 17.2361C8.04863 17.2004 7.82866 17.0717 7.68166 16.8784C7.53467 16.685 7.47269 16.4428 7.50938 16.205C7.54606 15.9672 7.6784 15.7534 7.87728 15.6104L15.4458 10.1765C15.6063 10.0614 15.8006 9.99954 16 9.99988Z"
-                                        fill="#FF3D00" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_67_4121">
-                                        <rect width="17" height="12" fill="white"
-                                            transform="translate(24.5 22) rotate(-180)" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                        </button>
-                        <button type="button" (click)="changePriority('medium')"
-                            [class.btn-not-selectet]="priority != 'medium'"
-                            [class.btn-medium]="priority == 'medium'">Medium
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_67_4037)">
-                                    <path
-                                        d="M23.5685 19.1671L8.43151 19.1671C8.18446 19.1671 7.94752 19.0682 7.77283 18.8923C7.59814 18.7163 7.5 18.4776 7.5 18.2288C7.5 17.98 7.59814 17.7413 7.77283 17.5653C7.94752 17.3894 8.18446 17.2905 8.43151 17.2905L23.5685 17.2905C23.8155 17.2905 24.0525 17.3894 24.2272 17.5653C24.4019 17.7413 24.5 17.98 24.5 18.2288C24.5 18.4776 24.4019 18.7163 24.2272 18.8923C24.0525 19.0682 23.8155 19.1671 23.5685 19.1671Z"
-                                        fill="#FFA800" />
-                                    <path
-                                        d="M23.5685 14.71L8.43151 14.71C8.18446 14.71 7.94752 14.6112 7.77283 14.4352C7.59814 14.2593 7.5 14.0206 7.5 13.7718C7.5 13.5229 7.59814 13.2843 7.77283 13.1083C7.94752 12.9323 8.18446 12.8335 8.43151 12.8335L23.5685 12.8335C23.8155 12.8335 24.0525 12.9323 24.2272 13.1083C24.4019 13.2843 24.5 13.5229 24.5 13.7718C24.5 14.0206 24.4019 14.2593 24.2272 14.4352C24.0525 14.6112 23.8155 14.71 23.5685 14.71Z"
-                                        fill="#FFA800" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_67_4037">
-                                        <rect width="17" height="6.33333" fill="white"
-                                            transform="translate(7.5 12.8335)" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                        </button>
-                        <button type="button" (click)="changePriority('low')"
-                            [class.btn-not-selectet]="priority != 'low'" [class.btn-low]="priority == 'low'">Low
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_67_4065)">
-                                    <path
-                                        d="M16 17.2452C15.8006 17.2456 15.6063 17.1837 15.4457 17.0686L7.87724 11.6347C7.77877 11.5639 7.6956 11.475 7.63247 11.373C7.56935 11.2709 7.52751 11.1578 7.50934 11.0401C7.47266 10.8023 7.53463 10.5601 7.68163 10.3667C7.82862 10.1734 8.0486 10.0447 8.29317 10.0091C8.53773 9.97339 8.78686 10.0336 8.98574 10.1766L16 15.2075L23.0142 10.1766C23.1127 10.1058 23.2245 10.0546 23.3434 10.0258C23.4622 9.9971 23.5857 9.9914 23.7068 10.0091C23.8279 10.0267 23.9442 10.0674 24.0492 10.1288C24.1541 10.1901 24.2456 10.271 24.3183 10.3667C24.3911 10.4625 24.4438 10.5712 24.4734 10.6868C24.5029 10.8023 24.5088 10.9224 24.4906 11.0401C24.4725 11.1578 24.4306 11.2709 24.3675 11.373C24.3044 11.475 24.2212 11.5639 24.1227 11.6347L16.5542 17.0686C16.3937 17.1837 16.1994 17.2456 16 17.2452Z"
-                                        fill="#7AE229" />
-                                    <path
-                                        d="M16 22.0001C15.8006 22.0005 15.6063 21.9386 15.4457 21.8235L7.87724 16.3896C7.67837 16.2466 7.54603 16.0328 7.50934 15.795C7.47266 15.5572 7.53463 15.315 7.68163 15.1216C7.82862 14.9283 8.0486 14.7996 8.29317 14.7639C8.53773 14.7283 8.78686 14.7885 8.98574 14.9314L16 19.9624L23.0142 14.9314C23.2131 14.7885 23.4622 14.7283 23.7068 14.7639C23.9514 14.7996 24.1713 14.9283 24.3183 15.1216C24.4653 15.315 24.5273 15.5572 24.4906 15.795C24.4539 16.0328 24.3216 16.2466 24.1227 16.3896L16.5542 21.8235C16.3937 21.9386 16.1994 22.0005 16 22.0001Z"
-                                        fill="#7AE229" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_67_4065">
-                                        <rect width="17" height="12" fill="white" transform="translate(7.5 10)" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div (click)="onWrapperClick($event)">
-                    <p>Assigned to</p>
-                    <div class="search-wrapper menu-wrapper overlay-open" [class.visible]="isOverlayOpen1"
-                        (click)="toggleOverlay('assign', $event)">
-                        <input type="text" name="assignedToInput" class="search-input"
-                            placeholder="Select contacts to assign" [(ngModel)]="contactSearchTerm"
-                            (input)="onSearchChange($event)" (click)="openDropdown($event)">
-                        <div class="input-button">
-                            <img src="./img/icons/arrow_drop_down.svg" [class.rotated]="isOverlayOpen1" alt="">
-                        </div>
-                    </div>
-                    <div class="overlay-menu" [class.visible]="isOverlayOpen1" [class.hidden]="!isOverlayOpen1"
-                        (click)="$event.stopPropagation()">
-                        @for (item of getFilteredContacts(); track $index) {
-                        @for (contact of item.contacts; track $index) {
-                        <label class="assignt-contact-wrapper" for="assign-contact-{{contact.id}}">
-                            <div>
-                                <div class="contact-icon" [style.background-color]="getRandomColor(contact.name)">
-                                    {{ contactDataService.getInitials(contact.name) }}
-                                </div>
-                                <p>{{contact.name}}</p>
-                            </div>
-                            <input class="assign-checkbox" type="checkbox" name="" id="assign-contact-{{contact.id}}"
-                                [checked]="isContactAssigned(contact)" (change)="selectContact(contact, $event)">
-                            <span class="checkmark"></span>
-                        </label>
-                        }
-                        }
-                        @if (getFilteredContacts().length === 0 && contactSearchTerm) {
-                        <div class="no-results">
-                            <p>No contacts found matching "{{contactSearchTerm}}"</p>
-                        </div>
-                        }
-                    </div>
-                </div>
-                <div class="initials-wrapper">
-                    @if(assignetTo.length > 3){
-                    @for (user of [1, 2, 3]; track $index) {
-                    <div class="contact-icon" [style.background-color]="getRandomColor(assignetTo[$index].name)">
-                        {{contactDataService.getInitials(assignetTo[$index].name)}}
-                    </div>
-                    }
-                    <div class="contact-icon more-avatars">
-                        <img src="./img/icons/task-card/plus-more-avatars.svg" alt="">
-                    </div>
-                    }@else{
-                    @for (contact of assignetTo; track $index) {
-                    <div class="contact-icon" [style.background-color]="getRandomColor(contact.name)">
-                        {{ contactDataService.getInitials(contact.name) }}
-                    </div>
-                    }
-                    }
-                </div>
-                <div>
-                    <p>Category<span class="red">*</span></p>
-                    <div class="menu-wrapper overlay-open" [class.error-border]="showCategoryError"
-                        [class.visible]="isOverlayOpen2" (click)="toggleOverlay('category', $event)">
-                        <p>{{ category }}</p>
-                        <div class="input-button">
-                            <img src="./img/icons/arrow_drop_down.svg" [class.rotated]="isOverlayOpen2" alt="">
-                        </div>
-                    </div>
-                    <div class="overlay-menu" [class.visible]="isOverlayOpen2" [class.hidden]="!isOverlayOpen2">
-                        <div (click)="selectCategory('Technical Task')" class="assignt-contact-wrapper">
-                            <p>Technical Task</p>
-                        </div>
-                        <div (click)="selectCategory('User Story')" class="assignt-contact-wrapper">
-                            <p>User Story</p>
-                        </div>
-                    </div>
-                    <div class="error" *ngIf="showCategoryError">
-                        Category is required!
-                    </div>
-                </div>
-                <div>
-                    <p>Subtasks</p>
-                    <div class="subtask-wrapper">
-                        <input name="subtask" (keydown.enter)="addSubtaskToArray()" (focus)="subtaskInputFocus = true"
-                            (blur)="subtaskInputFocus = false" [(ngModel)]="addSubtask" #subtaskInput="ngModel"
-                            class="input" type="text" placeholder="Add new subtask">
-                        <div *ngIf="!subtaskInputFocus">
-                            <div class="input-button">
-                                <img src="./img/icons/add_task.svg" alt="">
-                            </div>
-                        </div>
-                        <div class="blue-border" *ngIf="subtaskInputFocus">
-                            <div class="input-button">
-                                <img (mousedown)="addSubtaskToArray()" src="./img/icons/dark-check.svg" alt="">
-                            </div>
-                            <span class="smal-seperator"></span>
-                            <div (mousedown)="addSubtask = ''" class="input-button">
-                                <img src="./img/icons/delete_contact.svg" alt="">
-                            </div>
-                        </div>
-                    </div>
-                    <ul class="subtask-container">
-                        @for (item of subtasks; track $index) {
-                        <li *ngIf="changeSubtask != $index">{{item.title}}
-                            <div>
-                                <div class="input-button">
-                                    <img (click)="openSubtaskInput($index)" src="./img/icons/edit_contact.svg" alt="">
-                                </div>
-                                <span class="smal-seperator"></span>
-                                <div class="input-button">
-                                    <img (click)="deleteSubtask($index)" src="./img/icons/delete_contact.svg" alt="">
-                                </div>
-                            </div>
-                        </li>
-                        <div class="input-edit-subtask-wrapper" *ngIf="changeSubtask == $index">
-                            <input [(ngModel)]="subtasksInput" name="subtaskEdit" type="text">
-                            <div>
-                                <div class="input-button">
-                                    <img (click)="changeSubtaskTitle($index)" src="./img/icons/dark-check.svg" alt="">
-                                </div>
-                                <span class="smal-seperator"></span>
-                                <div class="input-button">
-                                    <img (click)="deleteSubtask($index)" src="./img/icons/delete_contact.svg" alt="">
-                                </div>
-                            </div>
-                        </div>
-                        }
-                    </ul>
-                </div>
-            </div>
+<h2>Add Task</h2>
+<form #taskForm="ngForm" (ngSubmit)="submitTaskFromForm()" action="">
+  <div class="fullcontent">
+    <div class="left-content">
+      <div>
+        <p>Title<span class="red">*</span></p>
+        <input name="title" id="title" [(ngModel)]="title" #titleInput="ngModel" class="input" required
+          type="text" placeholder="Enter a title">
+        @if (titleInput.invalid && (titleInput.dirty || titleInput.touched)) {
+          <div class="error">
+            Title is required!
+          </div>
+        }
+      </div>
+      <div>
+        <p>Description</p>
+        <textarea [(ngModel)]="description" name="Description" id=""
+        placeholder="Enter a Description"></textarea>
+      </div>
+      <div>
+        <p>Due date<span class="red">*</span></p>
+        <input required class="input" [min]="minDate" type="date" name="date" id="date" [(ngModel)]="date"
+          #dateInput="ngModel" lang="en-US">
+        @if (dateInput.invalid && (dateInput.dirty || dateInput.touched)) {
+          <div class="error">
+            Due date is required!
+          </div>
+        }
+      </div>
+    </div>
+    <div class="separator"></div>
+    <div class="right-content">
+      <div>
+        <p>Priority</p>
+        <div class="button-wrapper">
+          <button type="button" (click)="changePriority('urgent')"
+            [class.btn-not-selectet]="priority != 'urgent'"
+            [class.btn-urgent]="priority == 'urgent'">Urgent
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_67_4121)">
+                <path
+                  d="M16 14.7548C16.1994 14.7544 16.3937 14.8163 16.5543 14.9314L24.1228 20.3653C24.2212 20.4361 24.3044 20.525 24.3675 20.627C24.4307 20.7291 24.4725 20.8422 24.4907 20.9599C24.5273 21.1977 24.4654 21.4399 24.3184 21.6333C24.1714 21.8266 23.9514 21.9553 23.7068 21.9909C23.4623 22.0266 23.2131 21.9664 23.0143 21.8234L16 16.7925L8.98577 21.8234C8.8873 21.8942 8.77545 21.9454 8.65662 21.9742C8.53779 22.0029 8.4143 22.0086 8.2932 21.9909C8.1721 21.9733 8.05577 21.9326 7.95084 21.8712C7.84592 21.8099 7.75445 21.729 7.68166 21.6333C7.60888 21.5375 7.5562 21.4288 7.52664 21.3132C7.49708 21.1977 7.49122 21.0776 7.50938 20.9599C7.52754 20.8422 7.56938 20.7291 7.63251 20.627C7.69563 20.525 7.77881 20.4361 7.87728 20.3653L15.4458 14.9314C15.6063 14.8163 15.8006 14.7544 16 14.7548Z"
+                  fill="#FF3D00" />
+                <path
+                  d="M16 9.99988C16.1994 9.99954 16.3937 10.0614 16.5543 10.1765L24.1228 15.6104C24.3216 15.7534 24.454 15.9672 24.4907 16.205C24.5273 16.4428 24.4654 16.685 24.3184 16.8784C24.1714 17.0717 23.9514 17.2004 23.7068 17.2361C23.4623 17.2717 23.2131 17.2115 23.0143 17.0686L16 12.0376L8.98577 17.0686C8.78689 17.2115 8.53777 17.2717 8.2932 17.2361C8.04863 17.2004 7.82866 17.0717 7.68166 16.8784C7.53467 16.685 7.47269 16.4428 7.50938 16.205C7.54606 15.9672 7.6784 15.7534 7.87728 15.6104L15.4458 10.1765C15.6063 10.0614 15.8006 9.99954 16 9.99988Z"
+                  fill="#FF3D00" />
+              </g>
+              <defs>
+                <clipPath id="clip0_67_4121">
+                  <rect width="17" height="12" fill="white"
+                    transform="translate(24.5 22) rotate(-180)" />
+                </clipPath>
+              </defs>
+            </svg>
+          </button>
+          <button type="button" (click)="changePriority('medium')"
+            [class.btn-not-selectet]="priority != 'medium'"
+            [class.btn-medium]="priority == 'medium'">Medium
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_67_4037)">
+                <path
+                  d="M23.5685 19.1671L8.43151 19.1671C8.18446 19.1671 7.94752 19.0682 7.77283 18.8923C7.59814 18.7163 7.5 18.4776 7.5 18.2288C7.5 17.98 7.59814 17.7413 7.77283 17.5653C7.94752 17.3894 8.18446 17.2905 8.43151 17.2905L23.5685 17.2905C23.8155 17.2905 24.0525 17.3894 24.2272 17.5653C24.4019 17.7413 24.5 17.98 24.5 18.2288C24.5 18.4776 24.4019 18.7163 24.2272 18.8923C24.0525 19.0682 23.8155 19.1671 23.5685 19.1671Z"
+                  fill="#FFA800" />
+                <path
+                  d="M23.5685 14.71L8.43151 14.71C8.18446 14.71 7.94752 14.6112 7.77283 14.4352C7.59814 14.2593 7.5 14.0206 7.5 13.7718C7.5 13.5229 7.59814 13.2843 7.77283 13.1083C7.94752 12.9323 8.18446 12.8335 8.43151 12.8335L23.5685 12.8335C23.8155 12.8335 24.0525 12.9323 24.2272 13.1083C24.4019 13.2843 24.5 13.5229 24.5 13.7718C24.5 14.0206 24.4019 14.2593 24.2272 14.4352C24.0525 14.6112 23.8155 14.71 23.5685 14.71Z"
+                  fill="#FFA800" />
+              </g>
+              <defs>
+                <clipPath id="clip0_67_4037">
+                  <rect width="17" height="6.33333" fill="white"
+                    transform="translate(7.5 12.8335)" />
+                </clipPath>
+              </defs>
+            </svg>
+          </button>
+          <button type="button" (click)="changePriority('low')"
+            [class.btn-not-selectet]="priority != 'low'" [class.btn-low]="priority == 'low'">Low
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_67_4065)">
+                <path
+                  d="M16 17.2452C15.8006 17.2456 15.6063 17.1837 15.4457 17.0686L7.87724 11.6347C7.77877 11.5639 7.6956 11.475 7.63247 11.373C7.56935 11.2709 7.52751 11.1578 7.50934 11.0401C7.47266 10.8023 7.53463 10.5601 7.68163 10.3667C7.82862 10.1734 8.0486 10.0447 8.29317 10.0091C8.53773 9.97339 8.78686 10.0336 8.98574 10.1766L16 15.2075L23.0142 10.1766C23.1127 10.1058 23.2245 10.0546 23.3434 10.0258C23.4622 9.9971 23.5857 9.9914 23.7068 10.0091C23.8279 10.0267 23.9442 10.0674 24.0492 10.1288C24.1541 10.1901 24.2456 10.271 24.3183 10.3667C24.3911 10.4625 24.4438 10.5712 24.4734 10.6868C24.5029 10.8023 24.5088 10.9224 24.4906 11.0401C24.4725 11.1578 24.4306 11.2709 24.3675 11.373C24.3044 11.475 24.2212 11.5639 24.1227 11.6347L16.5542 17.0686C16.3937 17.1837 16.1994 17.2456 16 17.2452Z"
+                  fill="#7AE229" />
+                <path
+                  d="M16 22.0001C15.8006 22.0005 15.6063 21.9386 15.4457 21.8235L7.87724 16.3896C7.67837 16.2466 7.54603 16.0328 7.50934 15.795C7.47266 15.5572 7.53463 15.315 7.68163 15.1216C7.82862 14.9283 8.0486 14.7996 8.29317 14.7639C8.53773 14.7283 8.78686 14.7885 8.98574 14.9314L16 19.9624L23.0142 14.9314C23.2131 14.7885 23.4622 14.7283 23.7068 14.7639C23.9514 14.7996 24.1713 14.9283 24.3183 15.1216C24.4653 15.315 24.5273 15.5572 24.4906 15.795C24.4539 16.0328 24.3216 16.2466 24.1227 16.3896L16.5542 21.8235C16.3937 21.9386 16.1994 22.0005 16 22.0001Z"
+                  fill="#7AE229" />
+              </g>
+              <defs>
+                <clipPath id="clip0_67_4065">
+                  <rect width="17" height="12" fill="white" transform="translate(7.5 10)" />
+                </clipPath>
+              </defs>
+            </svg>
+          </button>
         </div>
-        <p><span class="red">*</span>This field is required</p>
-        <div class="btn-button-wrapper" [class.btn-wrapper-Board]="openFromBoard">
+      </div>
+      <div (click)="onWrapperClick($event)">
+        <p>Assigned to</p>
+        <div class="search-wrapper menu-wrapper overlay-open" [class.visible]="isOverlayOpen1"
+          (click)="toggleOverlay('assign', $event)">
+          <input type="text" name="assignedToInput" class="search-input"
+            placeholder="Select contacts to assign" [(ngModel)]="contactSearchTerm"
+            (input)="onSearchChange($event)" (click)="openDropdown($event)">
+          <div class="input-button">
+            <img src="./img/icons/arrow_drop_down.svg" [class.rotated]="isOverlayOpen1" alt="">
+          </div>
+        </div>
+        <div class="overlay-menu" [class.visible]="isOverlayOpen1" [class.hidden]="!isOverlayOpen1"
+          (click)="$event.stopPropagation()">
+          @for (item of getFilteredContacts(); track $index) {
+            @for (contact of item.contacts; track $index) {
+              <label class="assignt-contact-wrapper" for="assign-contact-{{contact.id}}">
+                <div>
+                  <div class="contact-icon" [style.background-color]="getRandomColor(contact.name)">
+                    {{ contactDataService.getInitials(contact.name) }}
+                  </div>
+                  <p>{{contact.name}}</p>
+                </div>
+                <input class="assign-checkbox" type="checkbox" name="" id="assign-contact-{{contact.id}}"
+                  [checked]="isContactAssigned(contact)" (change)="selectContact(contact, $event)">
+                <span class="checkmark"></span>
+              </label>
+            }
+          }
+          @if (getFilteredContacts().length === 0 && contactSearchTerm) {
+            <div class="no-results">
+              <p>No contacts found matching "{{contactSearchTerm}}"</p>
+            </div>
+          }
+        </div>
+      </div>
+      <div class="initials-wrapper">
+        @if(assignetTo.length > 3){
+          @for (user of [1, 2, 3]; track $index) {
+            <div class="contact-icon" [style.background-color]="getRandomColor(assignetTo[$index].name)">
+              {{contactDataService.getInitials(assignetTo[$index].name)}}
+            </div>
+          }
+          <div class="contact-icon more-avatars">
+            <img src="./img/icons/task-card/plus-more-avatars.svg" alt="">
+          </div>
+          }@else{
+          @for (contact of assignetTo; track $index) {
+            <div class="contact-icon" [style.background-color]="getRandomColor(contact.name)">
+              {{ contactDataService.getInitials(contact.name) }}
+            </div>
+          }
+        }
+      </div>
+      <div>
+        <p>Category<span class="red">*</span></p>
+        <div class="menu-wrapper overlay-open" [class.error-border]="showCategoryError"
+          [class.visible]="isOverlayOpen2" (click)="toggleOverlay('category', $event)">
+          <p>{{ category }}</p>
+          <div class="input-button">
+            <img src="./img/icons/arrow_drop_down.svg" [class.rotated]="isOverlayOpen2" alt="">
+          </div>
+        </div>
+        <div class="overlay-menu" [class.visible]="isOverlayOpen2" [class.hidden]="!isOverlayOpen2">
+          <div (click)="selectCategory('Technical Task')" class="assignt-contact-wrapper">
+            <p>Technical Task</p>
+          </div>
+          <div (click)="selectCategory('User Story')" class="assignt-contact-wrapper">
+            <p>User Story</p>
+          </div>
+        </div>
+        @if (showCategoryError) {
+          <div class="error">
+            Category is required!
+          </div>
+        }
+      </div>
+      <div>
+        <p>Subtasks</p>
+        <div class="subtask-wrapper">
+          <input name="subtask" (keydown.enter)="addSubtaskToArray()" (focus)="subtaskInputFocus = true"
+            (blur)="subtaskInputFocus = false" [(ngModel)]="addSubtask" #subtaskInput="ngModel"
+            class="input" type="text" placeholder="Add new subtask">
+          @if (!subtaskInputFocus) {
             <div>
-                <button (click)="clearData()" type="reset" class="clear-btn">Clear
-                    <svg class="x-svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <mask id="mask0_26_8978" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0"
-                            width="24" height="24">
-                            <rect width="24" height="24" fill="#D9D9D9" />
-                        </mask>
-                        <g mask="url(#mask0_26_8978)">
-                            <path
-                                d="M11.9998 13.3998L7.0998 18.2998C6.91647 18.4831 6.68314 18.5748 6.3998 18.5748C6.11647 18.5748 5.88314 18.4831 5.6998 18.2998C5.51647 18.1165 5.4248 17.8831 5.4248 17.5998C5.4248 17.3165 5.51647 17.0831 5.6998 16.8998L10.5998 11.9998L5.6998 7.0998C5.51647 6.91647 5.4248 6.68314 5.4248 6.3998C5.4248 6.11647 5.51647 5.88314 5.6998 5.6998C5.88314 5.51647 6.11647 5.4248 6.3998 5.4248C6.68314 5.4248 6.91647 5.51647 7.0998 5.6998L11.9998 10.5998L16.8998 5.6998C17.0831 5.51647 17.3165 5.4248 17.5998 5.4248C17.8831 5.4248 18.1165 5.51647 18.2998 5.6998C18.4831 5.88314 18.5748 6.11647 18.5748 6.3998C18.5748 6.68314 18.4831 6.91647 18.2998 7.0998L13.3998 11.9998L18.2998 16.8998C18.4831 17.0831 18.5748 17.3165 18.5748 17.5998C18.5748 17.8831 18.4831 18.1165 18.2998 18.2998C18.1165 18.4831 17.8831 18.5748 17.5998 18.5748C17.3165 18.5748 17.0831 18.4831 16.8998 18.2998L11.9998 13.3998Z"
-                                fill="currentColor" />
-                        </g>
-                    </svg>
-                </button>
-                <button type="submit" class="create-btn">Create Task<img src="./img/icons/check.svg" alt=""></button>
+              <div class="input-button">
+                <img src="./img/icons/add_task.svg" alt="">
+              </div>
             </div>
+          }
+          @if (subtaskInputFocus) {
+            <div class="blue-border">
+              <div class="input-button">
+                <img (mousedown)="addSubtaskToArray()" src="./img/icons/dark-check.svg" alt="">
+              </div>
+              <span class="smal-seperator"></span>
+              <div (mousedown)="addSubtask = ''" class="input-button">
+                <img src="./img/icons/delete_contact.svg" alt="">
+              </div>
+            </div>
+          }
         </div>
-    </form>
+        <ul class="subtask-container">
+          @for (item of subtasks; track $index) {
+            @if (changeSubtask != $index) {
+              <li>{{item.title}}
+                <div>
+                  <div class="input-button">
+                    <img (click)="openSubtaskInput($index)" src="./img/icons/edit_contact.svg" alt="">
+                  </div>
+                  <span class="smal-seperator"></span>
+                  <div class="input-button">
+                    <img (click)="deleteSubtask($index)" src="./img/icons/delete_contact.svg" alt="">
+                  </div>
+                </div>
+              </li>
+            }
+            @if (changeSubtask == $index) {
+              <div class="input-edit-subtask-wrapper">
+                <input [(ngModel)]="subtasksInput" name="subtaskEdit" type="text">
+                <div>
+                  <div class="input-button">
+                    <img (click)="changeSubtaskTitle($index)" src="./img/icons/dark-check.svg" alt="">
+                  </div>
+                  <span class="smal-seperator"></span>
+                  <div class="input-button">
+                    <img (click)="deleteSubtask($index)" src="./img/icons/delete_contact.svg" alt="">
+                  </div>
+                </div>
+              </div>
+            }
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p><span class="red">*</span>This field is required</p>
+  <div class="btn-button-wrapper" [class.btn-wrapper-Board]="openFromBoard">
+    <div>
+      <button (click)="clearData()" type="reset" class="clear-btn">Clear
+        <svg class="x-svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <mask id="mask0_26_8978" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0"
+            width="24" height="24">
+            <rect width="24" height="24" fill="#D9D9D9" />
+          </mask>
+          <g mask="url(#mask0_26_8978)">
+            <path
+              d="M11.9998 13.3998L7.0998 18.2998C6.91647 18.4831 6.68314 18.5748 6.3998 18.5748C6.11647 18.5748 5.88314 18.4831 5.6998 18.2998C5.51647 18.1165 5.4248 17.8831 5.4248 17.5998C5.4248 17.3165 5.51647 17.0831 5.6998 16.8998L10.5998 11.9998L5.6998 7.0998C5.51647 6.91647 5.4248 6.68314 5.4248 6.3998C5.4248 6.11647 5.51647 5.88314 5.6998 5.6998C5.88314 5.51647 6.11647 5.4248 6.3998 5.4248C6.68314 5.4248 6.91647 5.51647 7.0998 5.6998L11.9998 10.5998L16.8998 5.6998C17.0831 5.51647 17.3165 5.4248 17.5998 5.4248C17.8831 5.4248 18.1165 5.51647 18.2998 5.6998C18.4831 5.88314 18.5748 6.11647 18.5748 6.3998C18.5748 6.68314 18.4831 6.91647 18.2998 7.0998L13.3998 11.9998L18.2998 16.8998C18.4831 17.0831 18.5748 17.3165 18.5748 17.5998C18.5748 17.8831 18.4831 18.1165 18.2998 18.2998C18.1165 18.4831 17.8831 18.5748 17.5998 18.5748C17.3165 18.5748 17.0831 18.4831 16.8998 18.2998L11.9998 13.3998Z"
+              fill="currentColor" />
+          </g>
+        </svg>
+      </button>
+      <button type="submit" class="create-btn">Create Task<img src="./img/icons/check.svg" alt=""></button>
+    </div>
+  </div>
+</form>
 </Section>

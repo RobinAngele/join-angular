@@ -1,100 +1,126 @@
 <section>
+  <div>
     <div>
-        <div>
-            <img (click)="goBackToLogin()" src="./img/icons/arrow-left-line.svg" alt="">
-        </div>
-        <h2>Sign up</h2>
-        <div class="accent-line"></div>
+      <img (click)="goBackToLogin()" src="./img/icons/arrow-left-line.svg" alt="">
     </div>
+    <h2>Sign up</h2>
+    <div class="accent-line"></div>
+  </div>
 
-    <form #form="ngForm" action="signUp">
-        <div class="input">
-            <input [(ngModel)]="userName" #userNameInput="ngModel"
-                [ngClass]="{'error-border': userNameInput.invalid && (userNameInput.touched || form.submitted)}"
-                placeholder="Name" required type="text" name="userName" id="userName">
-            <div>
-                <img src="./img/icons/person.svg" alt="">
-            </div>
-            <p class="error" *ngIf="userNameInput.invalid && (userNameInput.touched || form.submitted)">
-                Please enter your username.
+  <form #form="ngForm" action="signUp">
+    <div class="input">
+      <input [(ngModel)]="userName" #userNameInput="ngModel"
+        [ngClass]="{'error-border': userNameInput.invalid && (userNameInput.touched || form.submitted)}"
+        placeholder="Name" required type="text" name="userName" id="userName">
+      <div>
+        <img src="./img/icons/person.svg" alt="">
+      </div>
+      @if (userNameInput.invalid && (userNameInput.touched || form.submitted)) {
+        <p class="error">
+          Please enter your username.
+        </p>
+      }
+    </div>
+    <div class="input">
+      <input [(ngModel)]="email" #emailInput="ngModel"
+        [ngClass]="{'error-border': emailInput.invalid && (emailInput.touched || form.submitted)}"
+        placeholder="Email" required type="email" name="email" id="email">
+      <div>
+        <img src="./img/icons/mail.svg" alt="">
+      </div>
+      @if (emailInput.invalid && (emailInput.touched || form.submitted)) {
+        <p class="error">
+          Please enter a valid email.
+        </p>
+      }
+    </div>
+    <div class="input">
+      <input #passwordInputEle (focus)="passwordInput = true" (blur)="passwordInput = false"
+        [(ngModel)]="password"
+        [ngClass]="{'error-border': passwordInputRef.invalid && (passwordInputRef.touched || form.submitted)}"
+        #passwordInputRef="ngModel" [type]="showPassword? 'text' :'password'" required placeholder="Password"
+        name="password" id="password">
+      <div>
+        @if (!passwordInput && password.length == 0) {
+          <img src="./img/icons/lock.svg" alt="lock">
+        }
+        @if ((passwordInput || password.length > 0) && !showPassword) {
+          <img
+            (click)="togglePasswordVisibility('showPassword', passwordInputEle)"
+            src="./img/icons/visibility.svg" alt="visibility">
+          }
+          @if ((passwordInput || password.length > 0) && showPassword) {
+            <img
+              (click)="togglePasswordVisibility('showPassword', passwordInputEle)"
+              src="./img/icons/visibility_off.svg" alt="visibility_off">
+            }
+          </div>
+          @if (passwordInputRef.invalid && (passwordInputRef.touched || form.submitted)) {
+            <p class="error">
+              Please enter your password.
             </p>
+          }
         </div>
         <div class="input">
-            <input [(ngModel)]="email" #emailInput="ngModel"
-                [ngClass]="{'error-border': emailInput.invalid && (emailInput.touched || form.submitted)}"
-                placeholder="Email" required type="email" name="email" id="email">
-            <div>
-                <img src="./img/icons/mail.svg" alt="">
-            </div>
-            <p class="error" *ngIf="emailInput.invalid && (emailInput.touched || form.submitted)">
-                Please enter a valid email.
-            </p>
-        </div>
-        <div class="input">
-            <input #passwordInputEle (focus)="passwordInput = true" (blur)="passwordInput = false"
-                [(ngModel)]="password"
-                [ngClass]="{'error-border': passwordInputRef.invalid && (passwordInputRef.touched || form.submitted)}"
-                #passwordInputRef="ngModel" [type]="showPassword? 'text' :'password'" required placeholder="Password"
-                name="password" id="password">
-            <div>
-                <img *ngIf="!passwordInput && password.length == 0" src="./img/icons/lock.svg" alt="lock">
-                <img *ngIf="(passwordInput || password.length > 0) && !showPassword"
-                    (click)="togglePasswordVisibility('showPassword', passwordInputEle)"
-                    src="./img/icons/visibility.svg" alt="visibility">
-                <img *ngIf="(passwordInput || password.length > 0) && showPassword"
-                    (click)="togglePasswordVisibility('showPassword', passwordInputEle)"
-                    src="./img/icons/visibility_off.svg" alt="visibility_off">
-            </div>
-            <p class="error" *ngIf="passwordInputRef.invalid && (passwordInputRef.touched || form.submitted)">
-                Please enter your password.
-            </p>
-        </div>
-        <div class="input">
-            <input #passwordConfirmInputEle (focus)="passwordInputConfirm = true" (blur)="passwordInputConfirm = false"
-                [(ngModel)]="confirmPassword" #confirmPasswordInputRef="ngModel"
-                [ngClass]="{'error-border': confirmPasswordInputRef.invalid && (confirmPasswordInputRef.touched || form.submitted)}"
-                [type]="showPasswordConfirm? 'text' :'password'" required name="confirmPassword" id="confirmPassword"
-                placeholder="Confirm Password">
-            <div>
-                <img *ngIf="!passwordInputConfirm && confirmPassword.length == 0" src="./img/icons/lock.svg" alt="lock">
-                <img *ngIf="(passwordInputConfirm || confirmPassword.length > 0) && !showPasswordConfirm"
-                    (click)="togglePasswordVisibility('showPasswordConfirm', passwordConfirmInputEle)"
-                    src="./img/icons/visibility.svg" alt="visibility">
-                <img *ngIf="(passwordInputConfirm || confirmPassword.length > 0) && showPasswordConfirm"
-                    (click)="togglePasswordVisibility('showPasswordConfirm', passwordConfirmInputEle)"
-                    src="./img/icons/visibility_off.svg" alt="visibility_off">
-            </div>
-            <p class="error"
-                *ngIf="confirmPasswordInputRef.invalid && (confirmPasswordInputRef.touched || form.submitted)">
+          <input #passwordConfirmInputEle (focus)="passwordInputConfirm = true" (blur)="passwordInputConfirm = false"
+            [(ngModel)]="confirmPassword" #confirmPasswordInputRef="ngModel"
+            [ngClass]="{'error-border': confirmPasswordInputRef.invalid && (confirmPasswordInputRef.touched || form.submitted)}"
+            [type]="showPasswordConfirm? 'text' :'password'" required name="confirmPassword" id="confirmPassword"
+            placeholder="Confirm Password">
+          <div>
+            @if (!passwordInputConfirm && confirmPassword.length == 0) {
+              <img src="./img/icons/lock.svg" alt="lock">
+            }
+            @if ((passwordInputConfirm || confirmPassword.length > 0) && !showPasswordConfirm) {
+              <img
+                (click)="togglePasswordVisibility('showPasswordConfirm', passwordConfirmInputEle)"
+                src="./img/icons/visibility.svg" alt="visibility">
+              }
+              @if ((passwordInputConfirm || confirmPassword.length > 0) && showPasswordConfirm) {
+                <img
+                  (click)="togglePasswordVisibility('showPasswordConfirm', passwordConfirmInputEle)"
+                  src="./img/icons/visibility_off.svg" alt="visibility_off">
+                }
+              </div>
+              @if (confirmPasswordInputRef.invalid && (confirmPasswordInputRef.touched || form.submitted)) {
+                <p class="error"
+                  >
                 Please confirm your password.
-            </p>
-            <p class="error" *ngIf="passwordDontMatch">
+              </p>
+            }
+            @if (passwordDontMatch) {
+              <p class="error">
                 Your passwords don't match. Please try again.
-            </p>
-        </div>
-        <div class="privacy-policy">
+              </p>
+            }
+          </div>
+          <div class="privacy-policy">
             <label
-                [ngClass]="{'error-checkbox': confirmprivacyPolicyInpit.invalid && (confirmprivacyPolicyInpit.touched || form.submitted)}"
-                class="checkbox-wrapper">
-                <input [(ngModel)]="confirmprivacyPolicy" #confirmprivacyPolicyInpit="ngModel"
-                    (change)="togleManualChange()" required type="checkbox" name="privacyPolicy" id="privacyPolicy">
-                <span class="checkmark"></span>
+              [ngClass]="{'error-checkbox': confirmprivacyPolicyInpit.invalid && (confirmprivacyPolicyInpit.touched || form.submitted)}"
+              class="checkbox-wrapper">
+              <input [(ngModel)]="confirmprivacyPolicy" #confirmprivacyPolicyInpit="ngModel"
+                (change)="togleManualChange()" required type="checkbox" name="privacyPolicy" id="privacyPolicy">
+              <span class="checkmark"></span>
             </label>
             <span>I accept the
-                <a (mouseenter)="onLinkHover(true)" (mouseleave)="onLinkHover(false)" href="/privacy-policy">Privacy
-                    policy</a>
+              <a (mouseenter)="onLinkHover(true)" (mouseleave)="onLinkHover(false)" href="/privacy-policy">Privacy
+              policy</a>
             </span>
-            <p class="error"
-                *ngIf="confirmprivacyPolicyInpit.invalid && (confirmprivacyPolicyInpit.touched || form.submitted)">
+            @if (confirmprivacyPolicyInpit.invalid && (confirmprivacyPolicyInpit.touched || form.submitted)) {
+              <p class="error"
+                >
                 Please accept the privacy Policy.
-            </p>
-        </div>
-        <div class="button-wrapper">
+              </p>
+            }
+          </div>
+          <div class="button-wrapper">
             <button (click)="onSignUp()" [disabled]="form.invalid" type="submit">Sign up</button>
-        </div>
-    </form>
+          </div>
+        </form>
 
-    <div class="feedback-overlay" *ngIf="errorMessage">
-        {{ errorMessage }}
-    </div>
-</section>
+        @if (errorMessage) {
+          <div class="feedback-overlay">
+            {{ errorMessage }}
+          </div>
+        }
+      </section>

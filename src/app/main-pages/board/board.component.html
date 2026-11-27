@@ -3,7 +3,7 @@
     <div class="board-header">
       <div class="header-top-row">
         @if (isMobile) {
-        <h1>Board</h1>
+          <h1>Board</h1>
         }
         <button class="add-task-button-icon mobile-only" (click)="openAddTaskComponent()">
           <img src="img/icons/plus _add_task_mobile.svg" alt="Add task" class="add-task-icon">
@@ -11,7 +11,7 @@
       </div>
 
       @if (!isMobile) {
-      <h1 class="desktop-title">Board</h1>
+        <h1 class="desktop-title">Board</h1>
       }
 
       <div class="board-actions">
@@ -30,54 +30,56 @@
     </div>
 
     @if (searchTerm && !hasSearchResults) {
-    <div class="no-results-message">
-      <p>No results found for "{{ searchTerm }}"</p>
-    </div>
+      <div class="no-results-message">
+        <p>No results found for "{{ searchTerm }}"</p>
+      </div>
     }
 
     <div class="board-columns">
       @for (column of filteredColumns$ | async; track column.id) {
-      <div class="column" [ngClass]="{ 'empty': column.tasks.length === 0 }">
-        <div class="column-header">
-          <h2>{{ column.title }}</h2>
-          <button (click)="openAddTaskOverlay(column.status)" class="add-task-btn" title="Add new task"> </button>
-        </div>
+        <div class="column" [ngClass]="{ 'empty': column.tasks.length === 0 }">
+          <div class="column-header">
+            <h2>{{ column.title }}</h2>
+            <button (click)="openAddTaskOverlay(column.status)" class="add-task-btn" title="Add new task"> </button>
+          </div>
 
-        <div class="column-content" [cdkDropListOrientation]="isMobile ? 'horizontal' : 'vertical'" cdkDropList
-          [id]="column.status"
+          <div class="column-content" [cdkDropListOrientation]="isMobile ? 'horizontal' : 'vertical'" cdkDropList
+            [id]="column.status"
           [ngClass]="[ column.tasks.length < 1 ?
         'column-content-' + column.status + '-bg' : '', isDragging ? 'indicate-drop-ready' : '', column.tasks.length === 0 ? 'empty-column' : '']"
-          [cdkDropListData]="column.tasks" [cdkDropListConnectedTo]="column.connectedStatuses"
-          (cdkDropListDropped)="drop($event)">
+            [cdkDropListData]="column.tasks" [cdkDropListConnectedTo]="column.connectedStatuses"
+            (cdkDropListDropped)="drop($event)">
 
-          @for (task of column.tasks; track task.id) {
-          <app-task-card class="app-task-card" (dropIndication)="dropIndication($event)" [task]="task"
-            [isMobile]="isMobile" (taskClicked)="openTaskDetails($event)">
-          </app-task-card>
-          }
+            @for (task of column.tasks; track task.id) {
+              <app-task-card class="app-task-card" (dropIndication)="dropIndication($event)" [task]="task"
+                [isMobile]="isMobile" (taskClicked)="openTaskDetails($event)">
+              </app-task-card>
+            }
 
+          </div>
         </div>
-      </div>
       }
     </div>
   </div>
 </div>
 
-<div class="overlay-background" *ngIf="openAddTask" (click)="closeAddTaskOverlay()">
-  <div (click)="stopEvent($event)" class="overlay-panel slide-in">
-    <div (click)="closeAddTaskOverlay()">
-      <img src="./img/icons/close-button.svg" alt="">
-    </div>
-    <div (click)="closeWindow()">
-      <app-task-create-form (closeAddTaskOverlay)="closeAddTaskOverlay()" [openFromBoard]="true"
-        [taskStatus]="setTaskStatus" />
+@if (openAddTask) {
+  <div class="overlay-background" (click)="closeAddTaskOverlay()">
+    <div (click)="stopEvent($event)" class="overlay-panel slide-in">
+      <div (click)="closeAddTaskOverlay()">
+        <img src="./img/icons/close-button.svg" alt="">
+      </div>
+      <div (click)="closeWindow()">
+        <app-task-create-form (closeAddTaskOverlay)="closeAddTaskOverlay()" [openFromBoard]="true"
+          [taskStatus]="setTaskStatus" />
+      </div>
     </div>
   </div>
-</div>
+}
 
 @if (showTaskDialog && selectedTask) {
-<app-task-dialog [task]="selectedTask" [isEditMode]="isEditMode" (closeClicked)="closeTaskDialog()"
-  (editClicked)="editTask()" (deleteClicked)="deleteTask($event)" (saveClicked)="saveTask($event)"
-  (subtaskToggled)="toggleSubtask($event)">
-</app-task-dialog>
+  <app-task-dialog [task]="selectedTask" [isEditMode]="isEditMode" (closeClicked)="closeTaskDialog()"
+    (editClicked)="editTask()" (deleteClicked)="deleteTask($event)" (saveClicked)="saveTask($event)"
+    (subtaskToggled)="toggleSubtask($event)">
+  </app-task-dialog>
 }

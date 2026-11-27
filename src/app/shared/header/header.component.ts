@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 
 import { AuthenticationService } from '../../auth/services/authentication.service';
 
@@ -10,7 +10,7 @@ import { AuthenticationService } from '../../auth/services/authentication.servic
  */
 @Component({
   selector: 'app-header',
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
