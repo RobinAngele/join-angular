@@ -17,11 +17,8 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-
-      # package-lock.json resolves some packages from registry.npmmirror.com; use the official registry in CI
-      - name: Use the official npm registry
-        run: sed -i 's#https://registry.npmmirror.com/#https://registry.npmjs.org/#g' package-lock.json
+          # Node 20 is past its end of life; 24 is also what Angular 22 will need
+          node-version: 24
 
       - name: Install dependencies
         run: npm ci

@@ -1,63 +1,67 @@
 <section>
-    <div class="head">
-        <h1>Join 360</h1>
-        <div class="spacer-blue"></div>
-        <span class="tagline">Key Metrics at a Glance</span>
-    </div>
+  <div class="head">
+    <h1>Join 360</h1>
+    <div class="spacer-blue"></div>
+    <span class="tagline">Key Metrics at a Glance</span>
+  </div>
 
-    <div class="body">
-        <div *ngIf="columns$ | async as columns" class="card-container">
-            <div class="card-row">
-                <div class="card-to-do" routerLink="/board">
-                    <div class="icon"></div>
-                    <div class="text">
-                        <p class="count">{{columns[0].tasks.length}}</p>
-                        <p>To-do</p>
-                    </div>
-                </div>
-                <div class="card-done" routerLink="/board">
-                    <div class="icon"></div>
-                    <div class="text">
-                        <p class="count">{{columns[3].tasks.length}}</p>
-                        <p>Done</p>
-                    </div>
-                </div>
+  <div class="body">
+    @if (columns$ | async; as columns) {
+      <div class="card-container">
+        <div class="card-row">
+          <div class="card-to-do" routerLink="/board">
+            <div class="icon"></div>
+            <div class="text">
+              <p class="count">{{columns[0].tasks.length}}</p>
+              <p>To-do</p>
             </div>
-            <div class="card-row">
-                <div class="card-deadline" routerLink="/board">
-                    <div class="highest-priority-badge">
-                        <div class="icon"></div>
-                        <div class="text">
-                            <p class="count">{{countUrgentOpenTasks(columns)}}</p>
-                            <p>Urgent</p>
-                        </div>
-                    </div>
-                    <img src="./img/summary/spacer-line-grey.svg" alt="spacer line" class="spacer">
-                    <div class="deadline">
-                        <p class="date">{{getNextDeadline(columns)}}</p>
-                        <p>Upcoming Deadline</p>
-                    </div>
-                </div>
+          </div>
+          <div class="card-done" routerLink="/board">
+            <div class="icon"></div>
+            <div class="text">
+              <p class="count">{{columns[3].tasks.length}}</p>
+              <p>Done</p>
             </div>
-            <div class="card-row">
-                <div class="card-all-tasks" routerLink="/board">
-                    <p class="count">{{countOpenTaskWithStatus(columns, "incomplete")}}</p>
-                    <p>Tasks&nbsp;in<br>Board</p>
-                </div>
-                <div class="card-in-progress" routerLink="/board">
-                    <p class="count">{{countOpenTaskWithStatus(columns, "inprogress")}}</p>
-                    <p>Tasks in Progress</p>
-                </div>
-                <div class="card-awaiting-feedback" routerLink="/board">
-                    <p class="count">{{countOpenTaskWithStatus(columns, "awaiting")}}</p>
-                    <p>Awaiting Feedback</p>
-                </div>
-            </div>
+          </div>
         </div>
+        <div class="card-row">
+          <div class="card-deadline" routerLink="/board">
+            <div class="highest-priority-badge">
+              <div class="icon"></div>
+              <div class="text">
+                <p class="count">{{countUrgentOpenTasks(columns)}}</p>
+                <p>Urgent</p>
+              </div>
+            </div>
+            <img src="./img/summary/spacer-line-grey.svg" alt="spacer line" class="spacer">
+            <div class="deadline">
+              <p class="date">{{getNextDeadline(columns)}}</p>
+              <p>Upcoming Deadline</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-row">
+          <div class="card-all-tasks" routerLink="/board">
+            <p class="count">{{countOpenTaskWithStatus(columns, "incomplete")}}</p>
+            <p>Tasks&nbsp;in<br>Board</p>
+          </div>
+          <div class="card-in-progress" routerLink="/board">
+            <p class="count">{{countOpenTaskWithStatus(columns, "inprogress")}}</p>
+            <p>Tasks in Progress</p>
+          </div>
+          <div class="card-awaiting-feedback" routerLink="/board">
+            <p class="count">{{countOpenTaskWithStatus(columns, "awaiting")}}</p>
+            <p>Awaiting Feedback</p>
+          </div>
+        </div>
+      </div>
+    }
 
-        <div *ngIf="!(breakpointService.isMobileMedium$ | async)" class="greeting">
-            <p>{{getGreetingMessage()}}</p>
-            <p class="name">{{truncateName(getUserName())}}</p>
-        </div>
-    </div>
+    @if (!(breakpointService.isMobileMedium$ | async)) {
+      <div class="greeting">
+        <p>{{getGreetingMessage()}}</p>
+        <p class="name">{{truncateName(getUserName())}}</p>
+      </div>
+    }
+  </div>
 </section>

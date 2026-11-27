@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { AuthenticationService } from '../../../auth/services/authentication.service';
 
 /**
@@ -9,7 +9,7 @@ import { AuthenticationService } from '../../../auth/services/authentication.ser
  */
 @Component({
   selector: 'app-mobile-greeting',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './mobile-greeting.component.html',
   styleUrl: './mobile-greeting.component.scss',
 })

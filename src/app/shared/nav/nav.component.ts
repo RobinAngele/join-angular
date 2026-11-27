@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthenticationService } from '../../auth/services/authentication.service';
 import { ContactDataService } from '../../main-pages/shared-data/contact-data.service';
-import { CommonModule } from '@angular/common';
+
 
 /**
  * Navigation Component
@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
  */
 @Component({
   selector: 'app-nav',
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.scss',
 })

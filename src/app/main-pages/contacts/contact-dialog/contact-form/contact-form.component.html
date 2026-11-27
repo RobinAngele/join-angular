@@ -2,11 +2,11 @@
 
   <div class="contact-avatar-container">
     @if (editingContact) {
-    <div class="contact-avatar" [style.background-color]="getRandomColor(editingContact.name)">
-      {{ getInitials(editingContact.name) }}
-    </div>
+      <div class="contact-avatar" [style.background-color]="getRandomColor(editingContact.name)">
+        {{ getInitials(editingContact.name) }}
+      </div>
     } @else {
-    <img src="./img/icons/avatar-new.svg" alt="">
+      <img src="./img/icons/avatar-new.svg" alt="">
     }
   </div>
 
@@ -25,8 +25,12 @@
         formControlName="email" class="form-input" [class.error]="isFieldInvalid('email')" placeholder="Email">
       <img class="input-icon" src="./img/icons/mail.svg" alt="Mail Icon">
       <div class="error-message" [style.visibility]="isFieldInvalid('email') ? 'visible' : 'hidden'">
-        <span *ngIf="contactForm.get('email')?.errors?.['required']">E-Mail is required</span>
-        <span *ngIf="contactForm.get('email')?.errors?.['email']">Please enter valid email address</span>
+        @if (contactForm.get('email')?.errors?.['required']) {
+          <span>E-Mail is required</span>
+        }
+        @if (contactForm.get('email')?.errors?.['email']) {
+          <span>Please enter valid email address</span>
+        }
       </div>
     </div>
 
@@ -41,17 +45,17 @@
 
     <div class="form-actions">
       @if (editingContact && !this.isEditingOwnContact()) {
-      <button type="button" [disabled]="this.isEditingOwnContact()" class="btn-delete"
+        <button type="button" [disabled]="this.isEditingOwnContact()" class="btn-delete"
         (click)="deleteContact()">Delete</button>
       } @else {
-      <button type="button" class="btn-cancel" (click)="onCancel()">
-        Cancel
-        <svg width="24" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M12.0692 12.0001L17.3122 17.2431M6.82617 17.2431L12.0692 12.0001L6.82617 17.2431ZM17.3122 6.75708L12.0682 12.0001L17.3122 6.75708ZM12.0682 12.0001L6.82617 6.75708L12.0682 12.0001Z"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </button>
+        <button type="button" class="btn-cancel" (click)="onCancel()">
+          Cancel
+          <svg width="24" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M12.0692 12.0001L17.3122 17.2431M6.82617 17.2431L12.0692 12.0001L6.82617 17.2431ZM17.3122 6.75708L12.0682 12.0001L17.3122 6.75708ZM12.0682 12.0001L6.82617 6.75708L12.0682 12.0001Z"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
       }
       <button type="submit" class="btn-submit" [disabled]="contactForm.invalid">
         {{ editingContact ? 'Save' : 'Create contact' }}

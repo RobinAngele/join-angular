@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, OnInit, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { getRandomColor } from '../../../shared/color-utils';
 import { ContactDataService } from '../../shared-data/contact-data.service';
 
@@ -9,7 +9,7 @@ import { ContactDataService } from '../../shared-data/contact-data.service';
  */
 @Component({
   selector: 'app-contact-list',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './contact-list.component.html',
   styleUrl: './contact-list.component.scss',
 })

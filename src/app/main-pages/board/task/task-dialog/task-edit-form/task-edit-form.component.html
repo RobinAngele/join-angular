@@ -44,39 +44,41 @@
             </div>
             <div class="assigned-avatars">
               @for (user of editForm.get('assignedUsers')?.value || []; track user) {
-              <div class="user-avatar" [style.background-color]="getRandomColor(user)">
-                {{ getInitials(user) }}
-              </div>
+                <div class="user-avatar" [style.background-color]="getRandomColor(user)">
+                  {{ getInitials(user) }}
+                </div>
               }
             </div>
           </div>
-          <div class="contacts-list" *ngIf="showContactsList">
-            <div class="search-input-wrapper">
-              <input type="text" class="contact-search-input" placeholder="Search contacts..."
-                [(ngModel)]="contactSearchTerm" [ngModelOptions]="{ standalone: true }" (input)="onSearchChange($event)" (click)="$event.stopPropagation()">
-              <button type="button" class="clear-search-btn" *ngIf="contactSearchTerm" (click)="clearContactSearch()">
-                ×
-              </button>
-            </div>
-
-            @for (contact of getAvailableContacts(); track contact) {
-            <div class="contact-item">
-              <div class="user-avatar" [style.background-color]="getRandomColor(contact)">
-                {{ getInitials(contact) }}
+          @if (showContactsList) {
+            <div class="contacts-list">
+              <div class="search-input-wrapper">
+                <input type="text" class="contact-search-input" placeholder="Search contacts..."
+                  [(ngModel)]="contactSearchTerm" [ngModelOptions]="{ standalone: true }" (input)="onSearchChange($event)" (click)="$event.stopPropagation()">
+                @if (contactSearchTerm) {
+                  <button type="button" class="clear-search-btn" (click)="clearContactSearch()">
+                    ×
+                  </button>
+                }
               </div>
-              <span>{{ contact }}</span>
-              <div class="custom-checkbox" [class.checked]="isUserAssigned(contact)"
-                (click)="toggleAssignedUser(contact)">
-              </div>
+              @for (contact of getAvailableContacts(); track contact) {
+                <div class="contact-item">
+                  <div class="user-avatar" [style.background-color]="getRandomColor(contact)">
+                    {{ getInitials(contact) }}
+                  </div>
+                  <span>{{ contact }}</span>
+                  <div class="custom-checkbox" [class.checked]="isUserAssigned(contact)"
+                    (click)="toggleAssignedUser(contact)">
+                  </div>
+                </div>
+              }
+              @if (getAvailableContacts().length === 0 && contactSearchTerm) {
+                <div class="no-results">
+                  <p>No contacts found matching "{{contactSearchTerm}}"</p>
+                </div>
+              }
             </div>
-            }
-
-            @if (getAvailableContacts().length === 0 && contactSearchTerm) {
-            <div class="no-results">
-              <p>No contacts found matching "{{contactSearchTerm}}"</p>
-            </div>
-            }
-          </div>
+          }
         </div>
 
         <div class="form-group">
@@ -88,27 +90,27 @@
           </div>
           <div class="subtasks-edit-list">
             @for (subtask of editForm.get('subtasks')?.value; track $index) {
-            <div class="subtask-edit-item">
-              <span class="bullet">•</span>
-              @if (editingSubtaskIndex === $index) {
-              <input type="text" [value]="editingSubtaskText" (input)="onSubtaskInputChange($event)"
-                (blur)="saveSubtaskEdit($index)" (keyup.enter)="saveSubtaskEdit($index)"
-                (keyup.escape)="cancelSubtaskEdit()" #editInput class="subtask-edit-input" />
-              } @else {
-              <span class="subtask-title">{{ subtask.title }}</span>
-              }
-              <div class="subtask-actions">
-                <button type="button" class="subtask-action-btn edit-btn" (click)="startEditSubtask($index)"
-                  title="Edit subtask">
-                  <div class="icon-edit"></div>
-                </button>
-                <span class="separator">|</span>
-                <button type="button" class="subtask-action-btn delete-btn" (click)="removeSubtask($index)"
-                  title="Delete subtask">
-                  <div class="icon-delete"></div>
-                </button>
+              <div class="subtask-edit-item">
+                <span class="bullet">•</span>
+                @if (editingSubtaskIndex === $index) {
+                  <input type="text" [value]="editingSubtaskText" (input)="onSubtaskInputChange($event)"
+                    (blur)="saveSubtaskEdit($index)" (keyup.enter)="saveSubtaskEdit($index)"
+                    (keyup.escape)="cancelSubtaskEdit()" #editInput class="subtask-edit-input" />
+                } @else {
+                  <span class="subtask-title">{{ subtask.title }}</span>
+                }
+                <div class="subtask-actions">
+                  <button type="button" class="subtask-action-btn edit-btn" (click)="startEditSubtask($index)"
+                    title="Edit subtask">
+                    <div class="icon-edit"></div>
+                  </button>
+                  <span class="separator">|</span>
+                  <button type="button" class="subtask-action-btn delete-btn" (click)="removeSubtask($index)"
+                    title="Delete subtask">
+                    <div class="icon-delete"></div>
+                  </button>
+                </div>
               </div>
-            </div>
             }
           </div>
         </div>

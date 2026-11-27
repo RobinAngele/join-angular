@@ -9,7 +9,7 @@ import {
   ElementRef,
   ChangeDetectorRef,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { Task, Subtask } from '../../../../shared-data/task.interface';
@@ -22,7 +22,7 @@ import { getRandomColor, getInitials } from '../../../../../shared/color-utils';
  */
 @Component({
   selector: 'app-task-edit-form',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [ReactiveFormsModule, FormsModule],
   templateUrl: './task-edit-form.component.html',
   styleUrl: './task-edit-form.component.scss',
 })

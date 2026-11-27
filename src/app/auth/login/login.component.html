@@ -1,48 +1,58 @@
 <section>
-    <div>
-        <h2>Log in</h2>
-        <div class="accent-line"></div>
-    </div>
+  <div>
+    <h2>Log in</h2>
+    <div class="accent-line"></div>
+  </div>
 
-    <form #form="ngForm" action="login">
-        <div>
-            <input required [(ngModel)]="emailInputTest" #emailInputRef="ngModel"
-                [ngClass]="{'error-border': emailInputRef.invalid && (emailInputRef.touched || form.submitted)}"
-                placeholder="Email" type="email" name="email" id="email">
-            <div>
-                <img src="./img/icons/mail.svg" alt="Mail-icon">
-            </div>
-            <p class="error" *ngIf="emailInputRef.invalid && (emailInputRef.touched || form.submitted)">
-                Please enter a valid email.
+  <form #form="ngForm" action="login">
+    <div>
+      <input required [(ngModel)]="emailInputTest" #emailInputRef="ngModel"
+        [ngClass]="{'error-border': emailInputRef.invalid && (emailInputRef.touched || form.submitted)}"
+        placeholder="Email" type="email" name="email" id="email">
+      <div>
+        <img src="./img/icons/mail.svg" alt="Mail-icon">
+      </div>
+      @if (emailInputRef.invalid && (emailInputRef.touched || form.submitted)) {
+        <p class="error">
+          Please enter a valid email.
+        </p>
+      }
+    </div>
+    <div>
+      <input #passwordInputRef #passwordRef="ngModel" [(ngModel)]="passwordInputTest"
+        [ngClass]="{'error-border': passwordRef.invalid && (passwordRef.touched || form.submitted)}"
+        (focus)="passwordInput = true" (blur)="passwordInput = false" [type]="showPassword? 'text' :'password'"
+        placeholder="Password" required name="password" id="password">
+      <div>
+        @if (!passwordInput && passwordInputTest.length == 0) {
+          <img src="./img/icons/lock.svg" alt="lock">
+        }
+        @if ((passwordInput || passwordInputTest.length > 0) && !showPassword) {
+          <img class="hover" (mousedown)="preventBlur($event)"
+            (click)="togglePasswordVisibility(passwordInputRef)"
+            src="./img/icons/visibility.svg" alt="visibility">
+          }
+          @if ((passwordInput || passwordInputTest.length > 0) && showPassword) {
+            <img class="hover" (mousedown)="preventBlur($event)"
+              (click)="togglePasswordVisibility(passwordInputRef)"
+              src="./img/icons/visibility_off.svg" alt="visibility_off">
+            }
+          </div>
+          @if (passwordRef.invalid && (passwordRef.touched || form.submitted)) {
+            <p class="error">
+              Please enter your password.
             </p>
-        </div>
-        <div>
-            <input #passwordInputRef #passwordRef="ngModel" [(ngModel)]="passwordInputTest"
-                [ngClass]="{'error-border': passwordRef.invalid && (passwordRef.touched || form.submitted)}"
-                (focus)="passwordInput = true" (blur)="passwordInput = false" [type]="showPassword? 'text' :'password'"
-                placeholder="Password" required name="password" id="password">
-            <div>
-                <img *ngIf="!passwordInput && passwordInputTest.length == 0" src="./img/icons/lock.svg" alt="lock">
-                <img class="hover" (mousedown)="preventBlur($event)"
-                    (click)="togglePasswordVisibility(passwordInputRef)"
-                    *ngIf="(passwordInput || passwordInputTest.length > 0) && !showPassword"
-                    src="./img/icons/visibility.svg" alt="visibility">
-                <img class="hover" (mousedown)="preventBlur($event)"
-                    (click)="togglePasswordVisibility(passwordInputRef)"
-                    *ngIf="(passwordInput || passwordInputTest.length > 0) && showPassword"
-                    src="./img/icons/visibility_off.svg" alt="visibility_off">
-            </div>
-            <p class="error" *ngIf="passwordRef.invalid && (passwordRef.touched || form.submitted)">
-                Please enter your password.
-            </p>
+          }
         </div>
         <div class="btn-wrapper">
-            <button (click)="onLogin()" type="submit">Log in</button>
-            <button (click)="onGuestLogin()" type="button">Guest Log in</button>
+          <button (click)="onLogin()" type="submit">Log in</button>
+          <button (click)="onGuestLogin()" type="button">Guest Log in</button>
         </div>
-    </form>
+      </form>
 
-    <div class="feedback-overlay" *ngIf="errorMessage">
-        {{ errorMessage }}
-    </div>
-</section>
+      @if (errorMessage) {
+        <div class="feedback-overlay">
+          {{ errorMessage }}
+        </div>
+      }
+    </section>

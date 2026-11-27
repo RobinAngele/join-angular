@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { filter, Subscription } from 'rxjs';
 
 import { HeaderComponent } from './shared/header/header.component';
@@ -13,7 +13,7 @@ import { ContactDataService } from './main-pages/shared-data/contact-data.servic
  */
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, NavComponent, CommonModule],
+  imports: [RouterOutlet, HeaderComponent, NavComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
